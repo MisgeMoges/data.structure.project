@@ -1,20 +1,45 @@
+
+# The DynamicDualStack class is an implementation of a dynamic dual stack, 
+# which is a data structure that allows for the efficient storage and 
+# retrieval of elements in two separate stacks. 
+# The class provides methods for manipulating the stacks, such as pushing and
+# popping elements, retrieving the top element, checking the size and 
+# emptiness of a stack, and resizing the underlying array.
+
 class DynamicDualStack:
+    
     def __init__(self, n=10):
+        # Initialize the DynamicDualStack object with an initial capacity of 'n'
+        # If 'n' is less than or equal to 0, set it to 1
+        # Create an array of size 'n' with None as initial values
+        # Initialize stack sizes for both stacks to 0
+        # Store the initial capacity and array capacity
         if n <= 0:
             n = 1
         self.array = [None] * n
         self.stack_sizes = [0, 0]
         self.initial_capacity = n
         self.array_capacity = n
-
+        
+       
     def __copy__(self):
+         # Create a new instance of DynamicDualStack with the same array capacity
+        # Copy the stack sizes and elements from the original stack to the new stack
+        # Return the new stack
         new_stack = DynamicDualStack(self.array_capacity)
         new_stack.stack_sizes = self.stack_sizes.copy()
         new_stack.array[:self.stack_sizes[0]] = self.array[:self.stack_sizes[0]]
         new_stack.array[-self.stack_sizes[1] :] = self.array[-self.stack_sizes[1]:]
         return new_stack
+       
+       
+        
 
     def top(self, m):
+        # Check if the given stack identifier 'm' is valid
+        # Check if the specified stack is empty
+        # Pop and return the top element from the specified stack
+        # Resize the array if necessary
         if m not in [0, 1]:
             raise ValueError("Invalid stack identifier")
         if self.empty(m):
@@ -23,21 +48,36 @@ class DynamicDualStack:
             return self.array[self.stack_sizes[0] - 1]
         else:
             return self.array[-self.stack_sizes[1]]
-
+        
+      
     def size(self, m):
+        # Check if the given stack identifier 'm' is valid
+        # Return the size of the specified stack
+
         if m not in [0, 1]:
             raise ValueError("Invalid stack identifier")
         return self.stack_sizes[m]
-
+        
+       
     def empty(self, m):
+         # Check if the given stack identifier 'm' is valid
+        # Return True if the specified stack is empty, False otherwise
+
         if m not in [0, 1]:
             raise ValueError("Invalid stack identifier")
         return self.stack_sizes[m] == 0
+      
+     
+    def capacity(self):   
+      # Return the current capacity of the array
 
-    def capacity(self):
         return self.array_capacity
 
     def push(self, m, item):
+        
+        # Check if the given stack identifier 'm' is valid
+        # Check if the array is full and resize if necessary
+        # Push the 'item' onto the specified stack
         if m not in [0, 1]:
             raise ValueError("Invalid stack identifier")
         if self.stack_sizes[0] + self.stack_sizes[1] == self.array_capacity:
@@ -49,7 +89,12 @@ class DynamicDualStack:
             self.array[-self.stack_sizes[1] - 1] = item
             self.stack_sizes[1] += 1
 
+
     def pop(self, m):
+        # Check if the given stack identifier 'm' is valid
+        # Check if the specified stack is empty
+        # Pop and return the top element from the specified stack
+        # Resize the array if necessary
         if m not in [0, 1]:
             raise ValueError("Invalid stack identifier")
         if self.empty(m):
@@ -65,11 +110,19 @@ class DynamicDualStack:
         return item
 
     def clear(self):
+        # Reset the stack sizes to 0
+        # Resize the array to the initial capacity if it has changed
+
         self.stack_sizes = [0, 0]
         if self.array_capacity != self.initial_capacity:
             self._resize(self.initial_capacity)
 
     def _resize(self, new_capacity):
+        # Print a message indicating the resize operation with the new capacity
+        # Create a new array with the new capacity
+        # Copy the elements from the original array to the new array
+        # Update the array and array capacity with the new values
+
         print("Resize applied: new capacity =", new_capacity)
         new_array = [None] * new_capacity
         new_array[:self.stack_sizes[0]] = self.array[:self.stack_sizes[0]]
@@ -78,6 +131,7 @@ class DynamicDualStack:
         self.array_capacity = new_capacity
 
     def swap(self, other):
+         # Swap the arrays, stack sizes, initial capacity, and array capacity
         self.array, other.array = other.array, self.array
         self.stack_sizes, other.stack_sizes = other.stack_sizes, self.stack_sizes
         self.initial_capacity, other.initial_capacity = other.initial_capacity, self.initial_capacity
@@ -116,13 +170,12 @@ stack1.push(0, 50)  # Push 50 onto the first stack of stack1 (trigger resize)
 stack1.push(1, 60)  # Push 60 onto the second stack of stack1 (trigger resize)
 
 stack1.push(1, 60)
-stack1.push(0, 50)  # Push 50 onto the first stack of stack1 (trigger resize)
-stack1.push(1, 60)  # Push 60 onto the second stack of stack1 (trigger resize)
+stack1.push(0, 50) 
+stack1.push(1, 60) 
 stack1.push(0, 89)
 stack1.push(1, 90)
-stack1.push(0, 50)  # Push 50 onto the first stack of stack1 (trigger resize)
-stack1.push(1, 60)  # Push 60 onto the second stack of stack1 (trigger resize)
-
+stack1.push(0, 50)  
+stack1.push(1, 60)  
 stack1.push(1, 60)
 
 print("After resize:")
